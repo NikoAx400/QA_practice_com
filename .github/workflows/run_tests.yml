@@ -1,0 +1,35 @@
+name: Automated tests
+
+on:
+  workflows_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default:
+        type: choise
+        options:
+           - test_input_word
+
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.18"
+      - name: Install Chrome
+        run: sudo apt-get install google-chrome-stable
+      - name: install dependencies
+        run: pip install -r requirements.tst
+      - name: test_input_word
+        if: "github.event.inputs.deployment_target == 'test_input_word'"
+        run: pytest
+
+
